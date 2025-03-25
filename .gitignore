@@ -44,6 +44,9 @@ firebase-debug.log
 firebase-debug.*.log
 ui-debug.log
 ui-debug.*.log
+**/service-account.json
+**/firebase-service-account.json
+**/firebase-adminsdk.json
 
 # IDE
 .idea/
