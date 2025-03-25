@@ -23,7 +23,7 @@ const OpeningPanel = () => {
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
         <div className="mb-8">
           <Image
-            src="/fs_logo.jpg"
+            src="/fs_logo.svg"
             alt="The Fair Shoppe Logo"
             width={200}
             height={200}
