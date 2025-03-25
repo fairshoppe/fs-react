@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-gray-900;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .font-shadows {
+    font-family: var(--font-shadows), cursive;
+  }
+  
+  .font-caveat {
+    font-family: var(--font-caveat), cursive;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+  
+  body {
+    @apply bg-black text-white;
+  }
+}
