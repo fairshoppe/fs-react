@@ -1,9 +1,9 @@
 {
   "name": "fs-react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "engines": {
-    "node": ">=20.11.1"
+    "node": ">=20.0.0"
   },
   "scripts": {
     "dev": "next dev",
