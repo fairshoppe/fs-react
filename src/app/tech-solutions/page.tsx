@@ -49,7 +49,7 @@ export default function TechSolutions() {
 
   return (
     <ServicePageLayout
-      title="Tech Solutions"
+      title="Tech Solutions by Buteos Systems"
       backgroundImages={backgroundImages}
     >
       <div className="space-y-8 font-[var(--font-markazi)]">
