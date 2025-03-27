@@ -30,10 +30,10 @@ const OpeningPanel = () => {
             className="mx-auto"
           />
         </div>
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-6 leading-snug font-markazi">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#BCD5E6] mb-6 leading-snug font-markazi">
           At The Fair Shoppe, we believe in the power of creativity and technology to transform businesses and enrich lives.
         </h1>
-        <p className="text-xl sm:text-2xl text-white/90 font-markazi">
+        <p className="text-xl sm:text-2xl text-[#BCD5E6] font-markazi">
           Welcome to our shoppe!
         </p>
       </div>

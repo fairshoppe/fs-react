@@ -28,7 +28,7 @@ const ServicePageLayout: React.FC<ServicePageLayoutProps> = ({
   }, [backgroundImages.length]);
 
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', bgcolor: '#BCD5E6' }}>
       <Navbar />
       
       {/* Title Banner with Slideshow */}
@@ -72,7 +72,7 @@ const ServicePageLayout: React.FC<ServicePageLayoutProps> = ({
           <Typography
             variant="h2"
             sx={{
-              color: 'white',
+              color: '#BCD5E6',
               textAlign: 'center',
               fontFamily: 'var(--font-markazi)',
               textShadow: '2px 2px 4px rgba(0,0,0,0.5)',

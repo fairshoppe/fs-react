@@ -6,7 +6,7 @@ import {
   Toolbar,
   Typography,
   IconButton,
-  Drawer,
+  Drawer as MuiDrawer,
   List,
   ListItem,
   ListItemText,
@@ -58,7 +58,7 @@ export default function Navbar() {
 
   return (
     <>
-      <AppBar position="fixed" color="default" elevation={1}>
+      <AppBar position="fixed" color="transparent" elevation={1} sx={{ zIndex:1200}}>
         <Toolbar>
           <IconButton
             edge="start"
@@ -99,7 +99,7 @@ export default function Navbar() {
       </AppBar>
 
       {/* Navigation Drawer */}
-      <Drawer
+      <MuiDrawer
         anchor="left"
         open={menuOpen}
         onClose={() => setMenuOpen(false)}
@@ -143,7 +143,7 @@ export default function Navbar() {
             ))}
           </List>
         </Box>
-      </Drawer>
+      </MuiDrawer>
 
       {/* Cart Drawer */}
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />

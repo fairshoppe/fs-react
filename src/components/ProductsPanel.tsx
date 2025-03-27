@@ -68,24 +68,24 @@ const ProductsPanel = () => {
 
       {/* Content */}
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-        <h2 className="text-4xl sm:text-5xl font-bold text-white mb-12 drop-shadow-lg">
+        <h2 className="text-4xl sm:text-5xl font-bold text-[#BCD5E6] mb-12 drop-shadow-lg">
           Products
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
           {offerings.map((offering, index) => (
             <div key={index} className="text-center">
-              <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4 drop-shadow-lg">
+              <h3 className="text-2xl sm:text-3xl font-bold text-[#BCD5E6] mb-4 drop-shadow-lg">
                 {offering.title}
               </h3>
-              <p className="text-lg text-white mb-6 drop-shadow-md leading-relaxed">
+              <p className="text-lg text-[#BCD5E6] mb-6 drop-shadow-md leading-relaxed">
                 {offering.description}
               </p>
               <a
                 href={offering.buttonLink}
                 target={offering.external ? '_blank' : undefined}
                 rel={offering.external ? 'noopener noreferrer' : undefined}
-                className="inline-block px-8 py-3 bg-white/90 backdrop-blur-sm text-gray-900 rounded-full font-semibold hover:bg-white transition-colors shadow-lg"
+                className="inline-block px-8 py-3 bg-[#BCD5E6] backdrop-blur-sm text-gray-900 rounded-full font-semibold hover:bg-white transition-colors shadow-lg"
               >
                 {offering.buttonText}
               </a>

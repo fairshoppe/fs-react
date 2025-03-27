@@ -74,15 +74,15 @@ const ServicePanel = ({
 
       {/* Content */}
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-        <h2 className={`text-4xl sm:text-5xl font-bold text-white mb-8 drop-shadow-lg ${fontClass}`}>
+        <h2 className={`text-4xl sm:text-5xl font-bold text-[#BCD5E6] mb-8 drop-shadow-lg ${fontClass}`}>
           {title}
         </h2>
-        <p className={`text-lg sm:text-xl text-white mb-8 drop-shadow-md leading-relaxed ${fontClass}`}>
+        <p className={`text-lg sm:text-xl text-[#BCD5E6] mb-8 drop-shadow-md leading-relaxed ${fontClass}`}>
           {description}
         </p>
         <Link
           href={buttonLink}
-          className={`inline-block px-8 py-3 bg-white/90 backdrop-blur-sm text-gray-900 rounded-full font-semibold hover:bg-white transition-colors shadow-lg ${fontClass}`}
+          className={`inline-block px-8 py-3 bg-[#BCD5E6] backdrop-blur-sm text-gray-900 rounded-full font-semibold hover:bg-white transition-colors shadow-lg ${fontClass}`}
         >
           {buttonText}
         </Link>
