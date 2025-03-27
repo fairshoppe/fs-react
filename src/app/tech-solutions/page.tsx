@@ -68,6 +68,10 @@ export default function TechSolutions() {
             </div>
           ))}
         </div>
+        <div className="text-center p-5 bg-gray-100 border-t border-gray-300">
+        <p>This website was proudly developed by Buteos Systems using React and Next.js. We believe in open-source collaboration and transparency.</p>
+        <a href="https://github.com/fairshoppe/fs-react" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View the source code on GitHub</a>
+        </div>
       </div>
     </ServicePageLayout>
   );

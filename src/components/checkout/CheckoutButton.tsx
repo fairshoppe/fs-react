@@ -7,7 +7,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { logger, logError } from '@/utils/logger';
 
 // Initialize Stripe
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
 
 interface CheckoutButtonProps {
   userId?: string;
@@ -35,11 +35,16 @@ export default function CheckoutButton({ userId, onCheckout }: CheckoutButtonPro
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create checkout session');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create checkout session');
       }
 
       const { url } = await response.json();
       
+      if (!url) {
+        throw new Error('No checkout URL received');
+      }
+
       // Call the onCheckout callback if provided
       if (onCheckout) {
         onCheckout();

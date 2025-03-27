@@ -32,14 +32,14 @@ const ProductsPanel = () => {
   const offerings = [
     {
       title: "Custom Print Shoppe",
-      description: "Design your dream apparel! Upload your own image or let our AI create a unique design for shirts, bags, and more.",
+      description: "*Coming Soon* Design your dream apparel! Upload your own image or let our AI create a unique design for shirts, bags, and more.",
       buttonText: "Design Now",
       buttonLink: "https://the-fair-shoppe.printify.me",
       external: true
     },
     {
       title: "The Thrift Shoppe",
-      description: "Discover hidden gems! A curated, ever-changing selection of modern and vintage finds from our warehouse.",
+      description: "Discover hidden gems! A curated, ever-changing selection of modern and vintage finds from our collections.",
       buttonText: "Shop Now",
       buttonLink: "/thrift"
     }

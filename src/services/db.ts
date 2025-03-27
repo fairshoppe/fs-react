@@ -89,12 +89,14 @@ export interface Product {
   id: string;
   title: string;
   price: number;
-  description?: string;
+  description: string;
   image: string;
   category: string;
   condition: string;
-  size?: string;
+  size: string;
+  weight: number;
   brand?: string;
+  inventory: number;
   created_at?: Date;
   updated_at?: Date;
 }

@@ -14,18 +14,8 @@ import {
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import Image from 'next/image';
+import { Product } from '@/services/db';
 
-interface Product {
-  id: string;
-  title: string;
-  price: number;
-  image: string;
-  condition: string;
-  size?: string;
-  brand?: string;
-  category: string;
-  description?: string;
-}
 
 interface ProductModalProps {
   isOpen: boolean;

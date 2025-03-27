@@ -4,18 +4,7 @@ import React from 'react';
 import { Box, IconButton } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import ProductCard from './product/ProductCard';
-
-interface Product {
-  id: string;
-  title: string;
-  price: number;
-  image: string;
-  condition: string;
-  size?: string;
-  brand?: string;
-  category: string;
-  description?: string;
-}
+import { Product } from '@/services/db';
 
 interface ProductCarouselProps {
   products: Product[];

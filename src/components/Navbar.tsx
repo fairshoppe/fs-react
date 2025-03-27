@@ -44,6 +44,8 @@ export default function Navbar() {
 
   const menuItems = [
     { text: 'Home', icon: <HomeIcon />, path: '/' },
+    { text: 'Buteos Systems', icon: <TechIcon />, path: '/tech-solutions' },
+    { text: 'Design and Consulting', icon: <DesignIcon />, path: '/design-consulting' },
     { text: 'Thrift Shoppe', icon: <StoreIcon />, path: '/thrift' },
     { 
       text: 'Custom Shoppe', 
@@ -51,8 +53,6 @@ export default function Navbar() {
       path: 'https://the-fair-shoppe.printify.me',
       external: true 
     },
-    { text: 'Buteos Systems', icon: <TechIcon />, path: '/tech-solutions' },
-    { text: 'Design and Consulting', icon: <DesignIcon />, path: '/design-consulting' },
     { text: 'Contact Us', icon: <ContactIcon />, path: '/contact' },
   ];
 

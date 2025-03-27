@@ -10,9 +10,9 @@ import {
 } from '@mui/material';
 import Image from 'next/image';
 import { ShoppingCart } from '@mui/icons-material';
-
+import { Product } from '@/services/db';
 // This will be replaced with actual data fetching from your database
-const getProduct = (id: string) => {
+const getProduct = async (id: string) => {
   // Mock product data
   return {
     id,
@@ -21,14 +21,21 @@ const getProduct = (id: string) => {
     image: '/images/placeholder.jpg',
     condition: 'Excellent',
     size: 'M',
+    weight: 1.5,
     brand: 'Levi\'s',
     category: 'Outerwear',
     description: 'Classic vintage denim jacket in excellent condition. Features traditional styling with button front closure, chest pockets, and adjustable waist tabs. The denim has a perfect worn-in look while maintaining its structural integrity.',
+    inventory: 1,
   };
 };
 
-export default function ProductPage({ params }: { params: { id: string } }) {
-  const product = getProduct(params.id);
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const product: Product = await getProduct(id);
 
   return (
     <Container maxWidth="lg" sx={{ py: 8 }}>

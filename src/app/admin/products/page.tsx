@@ -3,12 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import {
   Container,
-  Typography,
   Box,
-  TextField,
+  Typography,
   Button,
-  Grid,
-  MenuItem,
   Paper,
   Table,
   TableBody,
@@ -21,282 +18,320 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Card,
-  CardContent,
-  CardActions,
-  FormControl,
-  InputLabel,
-  Select,
+  TextField,
   Alert,
 } from '@mui/material';
-import { Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
-import { useTheme } from '@mui/material/styles';
+import { Edit as EditIcon, Delete as DeleteIcon, Logout as LogoutIcon } from '@mui/icons-material';
+import { useRouter } from 'next/navigation';
 import { logger, logError } from '@/utils/logger';
-
-interface Product {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  category: string;
-  imageUrl: string;
-  inventory: number;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-const categories = ['Clothing', 'Accessories', 'Home', 'Electronics', 'Books'];
-
-const conditions = ['New','Excellent', 'Good', 'Fair', 'Poor'];
+import { useProducts } from '@/hooks/useProducts';
+import { Product, productService } from '@/services/db';
+import { onSnapshot, collection, query, orderBy } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 export default function AdminProductsPage() {
-  const theme = useTheme();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [showForm, setShowForm] = useState(false);
+  const router = useRouter();
+  const { products, loading, error, setProducts } = useProducts();
+  const [open, setOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [error, setError] = useState<string>('');
+  const [formData, setFormData] = useState<Partial<Product>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    logger.debug('Admin products page mounted');
-    loadProducts();
-  }, []);
+    // Check authentication on mount and page reloads
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/auth/admin/check');
+        if (!response.ok) {
+          router.push('/admin/login');
+        }
+      } catch (error) {
+        logError(error instanceof Error ? error : new Error('Auth check failed'), 'Admin Products');
+        router.push('/admin/login');
+      }
+    };
 
-  const loadProducts = async () => {
-    try {
-      logger.info('Loading products...');
-      const response = await fetch('/api/products');
-      const data = await response.json();
-      logger.debug('Loaded products:', data);
-      setProducts(data);
-    } catch (error) {
-      logError(error instanceof Error ? error : new Error('Failed to load products'), 'Admin Products');
-      setError('Failed to load products');
+    checkAuth();
+
+    // Set up real-time listener for products
+    let unsubscribe: (() => void) | undefined;
+
+    const setupListener = async () => {
+      try {
+        if (!db) {
+          logger.error('Firestore not initialized');
+          return;
+        }
+
+        const productsRef = collection(db, 'products');
+        const q = query(productsRef, orderBy('title'));
+        
+        unsubscribe = onSnapshot(q, 
+          (snapshot) => {
+            const updatedProducts = snapshot.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data(),
+              price: Number(doc.data().price),
+            })) as Product[];
+            setProducts(updatedProducts);
+          },
+          (error) => {
+            logError(error, 'Products Listener');
+          }
+        );
+      } catch (error) {
+        logError(error instanceof Error ? error : new Error('Failed to setup products listener'), 'Admin Products');
+      }
+    };
+
+    setupListener();
+
+    // Cleanup function
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, [router, setProducts]);
+
+  const handleOpen = (product?: Product) => {
+    if (product) {
+      setEditingProduct(product);
+      setFormData(product);
+    } else {
+      setEditingProduct(null);
+      setFormData({});
     }
+    setOpen(true);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleClose = () => {
+    setOpen(false);
+    setEditingProduct(null);
+    setFormData({});
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    
+    setIsSubmitting(true);
     try {
-      const productData = {
-        title: formData.get('title') as string,
-        description: formData.get('description') as string,
-        price: parseFloat(formData.get('price') as string || '0'),
-        category: formData.get('category') as string,
-        imageUrl: formData.get('imageUrl') as string,
-        inventory: parseInt(formData.get('inventory') as string || '0', 10),
-      };
-
-      logger.info('Submitting product data:', productData);
-
-      const url = editingProduct
-        ? `/api/products/${editingProduct.id}`
-        : '/api/products';
-
       if (editingProduct) {
-        logger.info('Updating product:', editingProduct.id);
+        // Update existing product
+        await productService.updateProduct(editingProduct.id, formData);
       } else {
-        logger.info('Creating new product');
+        // Add new product
+        await productService.createProduct(formData as Omit<Product, 'id'>);
       }
 
-      const response = await fetch(url, {
-        method: editingProduct ? 'PUT' : 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(productData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to save product');
-      }
-
-      logger.info('Reloading products after save...');
-      await loadProducts();
-      setEditingProduct(null);
-      setShowForm(false);
-      setError('');
+      handleClose();
+      logger.info(`Product ${editingProduct ? 'updated' : 'created'} successfully`);
     } catch (error) {
       logError(error instanceof Error ? error : new Error('Failed to save product'), 'Admin Products');
-      setError('Failed to save product');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleDelete = async (productId: string) => {
-    if (!confirm('Are you sure you want to delete this product?')) {
-      return;
-    }
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this product?')) return;
 
     try {
-      const response = await fetch(`/api/products/${productId}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete product');
-      }
-
-      await loadProducts();
+      await productService.deleteProduct(id);
+      logger.info('Product deleted successfully');
     } catch (error) {
       logError(error instanceof Error ? error : new Error('Failed to delete product'), 'Admin Products');
-      setError('Failed to delete product');
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('/api/auth/admin/logout', {
+        method: 'POST',
+      });
+
+      if (!response.ok) throw new Error('Failed to logout');
+
+      logger.info('Admin logged out successfully');
+      router.push('/admin/login');
+    } catch (error) {
+      logError(error instanceof Error ? error : new Error('Failed to logout'), 'Admin Products');
+    }
+  };
+
+  if (loading) {
+    return (
+      <Container>
+        <Typography>Loading...</Typography>
+      </Container>
+    );
+  }
+
   return (
-    <Container maxWidth="lg">
-      <Box sx={{ my: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
+    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 4 }}>
+        <Typography
+          variant="h4"
+          component="h1"
+          sx={{ fontFamily: 'var(--font-markazi)' }}
+        >
           Manage Products
         </Typography>
-
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
-
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            setEditingProduct(null);
-            setShowForm(true);
-          }}
-          sx={{ mb: 4 }}
-        >
-          Add New Product
-        </Button>
-
-        {showForm && (
-          <Box component="form" onSubmit={handleSubmit} sx={{ mb: 4 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="title"
-                  label="Title"
-                  defaultValue={editingProduct?.title || ''}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="description"
-                  label="Description"
-                  multiline
-                  rows={4}
-                  defaultValue={editingProduct?.description || ''}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  name="price"
-                  label="Price"
-                  type="number"
-                  defaultValue={editingProduct?.price || ''}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth required>
-                  <InputLabel>Category</InputLabel>
-                  <Select
-                    name="category"
-                    defaultValue={editingProduct?.category || ''}
-                  >
-                    {categories.map((category) => (
-                      <MenuItem key={category} value={category}>
-                        {category}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="imageUrl"
-                  label="Image URL"
-                  defaultValue={editingProduct?.imageUrl || ''}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="inventory"
-                  label="Inventory"
-                  type="number"
-                  defaultValue={editingProduct?.inventory || ''}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Button type="submit" variant="contained" color="primary">
-                  {editingProduct ? 'Update Product' : 'Create Product'}
-                </Button>
-                <Button
-                  variant="outlined"
-                  onClick={() => {
-                    setShowForm(false);
-                    setEditingProduct(null);
-                  }}
-                  sx={{ ml: 2 }}
-                >
-                  Cancel
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
-        )}
-
-        <Grid container spacing={2}>
-          {products.map((product) => (
-            <Grid item xs={12} sm={6} md={4} key={product.id}>
-              <Card>
-                <CardContent>
-                  <Typography variant="h6" component="h2">
-                    {product.title}
-                  </Typography>
-                  <Typography color="text.secondary">
-                    {product.category}
-                  </Typography>
-                  <Typography variant="body2">
-                    Price: ${product.price}
-                  </Typography>
-                  <Typography variant="body2">
-                    Inventory: {product.inventory}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button
-                    size="small"
-                    onClick={() => {
-                      setEditingProduct(product);
-                      setShowForm(true);
-                    }}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    size="small"
-                    color="error"
-                    onClick={() => handleDelete(product.id)}
-                  >
-                    Delete
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+        <Box>
+          <Button
+            variant="contained"
+            onClick={() => handleOpen()}
+            sx={{ mr: 2, fontFamily: 'var(--font-markazi)' }}
+          >
+            Add Product
+          </Button>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={handleLogout}
+            startIcon={<LogoutIcon />}
+            sx={{ fontFamily: 'var(--font-markazi)' }}
+          >
+            Logout
+          </Button>
+        </Box>
       </Box>
+
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>Category</TableCell>
+              <TableCell>Condition</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {products.map((product) => (
+              <TableRow key={product.id}>
+                <TableCell>{product.title}</TableCell>
+                <TableCell>${product.price.toFixed(2)}</TableCell>
+                <TableCell>{product.category}</TableCell>
+                <TableCell>{product.condition}</TableCell>
+                <TableCell>
+                  <IconButton onClick={() => handleOpen(product)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton onClick={() => handleDelete(product.id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>
+          {editingProduct ? 'Edit Product' : 'Add New Product'}
+        </DialogTitle>
+        <DialogContent>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+            <TextField
+              fullWidth
+              label="Title"
+              margin="normal"
+              value={formData.title || ''}
+              onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Description"
+              margin="normal"
+              multiline
+              rows={4}
+              value={formData.description || ''}
+              onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Price"
+              margin="normal"
+              type="number"
+              value={formData.price || ''}
+              onChange={(e) => setFormData(prev => ({ ...prev, price: parseFloat(e.target.value) }))}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Image URL"
+              margin="normal"
+              value={formData.image || ''}
+              onChange={(e) => setFormData(prev => ({ ...prev, image: e.target.value }))}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Category"
+              margin="normal"
+              value={formData.category || ''}
+              onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Condition"
+              margin="normal"
+              value={formData.condition || ''}
+              onChange={(e) => setFormData(prev => ({ ...prev, condition: e.target.value }))}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Size (Optional)"
+              margin="normal"
+              value={formData.size || ''}
+              onChange={(e) => setFormData(prev => ({ ...prev, size: e.target.value }))}
+            />
+            <TextField
+              fullWidth
+              label="Weight"
+              margin="normal"
+              type="number"
+              value={formData.weight || ''}
+              onChange={(e) => setFormData(prev => ({ ...prev, weight: parseFloat(e.target.value) }))}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Inventory"
+              margin="normal"
+              type="number"
+              value={formData.inventory || ''}
+              onChange={(e) => setFormData(prev => ({ ...prev, inventory: parseFloat(e.target.value) }))}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Brand (Optional)"
+              margin="normal"
+              value={formData.brand || ''}
+              onChange={(e) => setFormData(prev => ({ ...prev, brand: e.target.value }))}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleSubmit} variant="contained" disabled={isSubmitting}>
+            {isSubmitting ? 'Saving...' : (editingProduct ? 'Update' : 'Add')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 } 

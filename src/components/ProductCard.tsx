@@ -5,23 +5,18 @@ import Image from 'next/image';
 import { Card, CardContent, CardMedia, Typography, Button, Box } from '@mui/material';
 import { useCart } from '@/contexts/CartContext';
 import { logger } from '@/utils/logger';
+import { Product } from '@/services/db';
 
-interface Product {
-  id: string;
-  title: string;
-  description: string;
-  specifications: string;
-  size: string;
-  price: number;
-  image: string;
-  category: string;
-  inventory: number;
-}
 
 interface ProductCardProps {
   product: Product;
   onClick: () => void;
 }
+
+//type ProductCardProps = {
+  //product: Pick<Product, 'id' | 'title' | 'price' | 'image'>;
+  //onClick: () => void;
+//};
 
 const ProductCard = ({ product, onClick }: ProductCardProps) => {
   const { dispatch } = useCart();
@@ -57,7 +52,7 @@ const ProductCard = ({ product, onClick }: ProductCardProps) => {
         </Typography>
         <Typography variant="body2" color="text.secondary" paragraph>
           <span className="font-semibold">Specs:</span>{' '}
-          {truncateText(product.specifications.split('\n')[0], 50)}
+          {truncateText(product.size.split('\n')[0], 50)}
         </Typography>
         <Typography variant="body2" color="text.secondary" paragraph>
           <span className="font-semibold">Size:</span> {product.size}

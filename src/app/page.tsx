@@ -12,11 +12,8 @@ export default function Home() {
           <OpeningPanel />
         </div>
         <div className="snap-start">
-          <ProductsPanel />
-        </div>
-        <div className="snap-start">
           <ServicePanel
-            title="Tech Solutions"
+            title="Tech Solutions by Buteos Systems"
             description="Innovative tech solutions tailored to your business needs. We provide cutting-edge technology solutions designed to empower your business and drive growth. Our team of experienced developers and engineers specializes in creating custom software, web applications, and digital platforms that address your unique challenges."
             buttonText="Explore Solutions"
             buttonLink="/tech-solutions"
@@ -45,6 +42,9 @@ export default function Home() {
             ]}
             variant="design"
           />
+        </div>
+        <div className="snap-start">
+          <ProductsPanel />
         </div>
         <div className="snap-start">
           <ServicePanel

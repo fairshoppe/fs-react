@@ -30,5 +30,5 @@ export function useProducts(category?: string | null) {
     void fetchProducts();
   }, [category]);
 
-  return { products, loading, error };
+  return { products, loading, error, setProducts };
 } 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useState } from 'react';
 
 interface CartItem {
   id: string;
@@ -14,13 +14,15 @@ interface CartItem {
 interface CartState {
   items: CartItem[];
   total: number;
+  isLoading: boolean;
 }
 
 type CartAction =
   | { type: 'ADD_ITEM'; payload: CartItem }
   | { type: 'REMOVE_ITEM'; payload: string }
   | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
-  | { type: 'CLEAR_CART' };
+  | { type: 'CLEAR_CART' }
+  | { type: 'SET_ITEMS'; payload: CartItem[] };
 
 const CartContext = createContext<{
   state: CartState;
@@ -78,6 +80,14 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       return {
         items: [],
         total: 0,
+        isLoading: false,
+      };
+
+    case 'SET_ITEMS':
+      return {
+        items: action.payload,
+        total: action.payload.reduce((sum, item) => sum + item.price * item.quantity, 0),
+        isLoading: false,
       };
 
     default:
@@ -85,30 +95,43 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
   }
 };
 
+const initialState: CartState = {
+  items: [],
+  total: 0,
+  isLoading: true,
+};
+
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const initialState: CartState = {
-    items: [],
-    total: 0,
-  };
+  const [state, dispatch] = useReducer(cartReducer, initialState);
+  const [isClient, setIsClient] = useState(false);
 
   // Load cart from localStorage on mount
   useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      initialState.items = JSON.parse(savedCart);
-      initialState.total = initialState.items.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-      );
+    setIsClient(true);
+    try {
+      const savedCart = localStorage.getItem('cart');
+      if (savedCart) {
+        const items = JSON.parse(savedCart);
+        dispatch({
+          type: 'SET_ITEMS',
+          payload: items,
+        });
+      }
+    } catch (error) {
+      console.error('Error loading cart from localStorage:', error);
     }
   }, []);
 
-  const [state, dispatch] = useReducer(cartReducer, initialState);
-
   // Save cart to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(state.items));
-  }, [state.items]);
+    if (isClient && !state.isLoading) {
+      try {
+        localStorage.setItem('cart', JSON.stringify(state.items));
+      } catch (error) {
+        console.error('Error saving cart to localStorage:', error);
+      }
+    }
+  }, [state.items, state.isLoading, isClient]);
 
   return (
     <CartContext.Provider value={{ state, dispatch }}>
