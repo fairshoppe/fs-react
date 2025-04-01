@@ -20,6 +20,7 @@ import {
   DialogActions,
   TextField,
   Alert,
+  Grid,
 } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon, Logout as LogoutIcon } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
@@ -234,95 +235,166 @@ export default function AdminProductsPage() {
         </Table>
       </TableContainer>
 
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
         <DialogTitle>
           {editingProduct ? 'Edit Product' : 'Add New Product'}
         </DialogTitle>
         <DialogContent>
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
-            <TextField
-              fullWidth
-              label="Title"
-              margin="normal"
-              value={formData.title || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-              required
-            />
-            <TextField
-              fullWidth
-              label="Description"
-              margin="normal"
-              multiline
-              rows={4}
-              value={formData.description || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-              required
-            />
-            <TextField
-              fullWidth
-              label="Price"
-              margin="normal"
-              type="number"
-              value={formData.price || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, price: parseFloat(e.target.value) }))}
-              required
-            />
-            <TextField
-              fullWidth
-              label="Image URL"
-              margin="normal"
-              value={formData.image || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, image: e.target.value }))}
-              required
-            />
-            <TextField
-              fullWidth
-              label="Category"
-              margin="normal"
-              value={formData.category || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-              required
-            />
-            <TextField
-              fullWidth
-              label="Condition"
-              margin="normal"
-              value={formData.condition || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, condition: e.target.value }))}
-              required
-            />
-            <TextField
-              fullWidth
-              label="Size (Optional)"
-              margin="normal"
-              value={formData.size || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, size: e.target.value }))}
-            />
-            <TextField
-              fullWidth
-              label="Weight"
-              margin="normal"
-              type="number"
-              value={formData.weight || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, weight: parseFloat(e.target.value) }))}
-              required
-            />
-            <TextField
-              fullWidth
-              label="Inventory"
-              margin="normal"
-              type="number"
-              value={formData.inventory || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, inventory: parseFloat(e.target.value) }))}
-              required
-            />
-            <TextField
-              fullWidth
-              label="Brand (Optional)"
-              margin="normal"
-              value={formData.brand || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, brand: e.target.value }))}
-            />
+            {/* Basic Information */}
+            <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+              Basic Information
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Title"
+                  value={formData.title || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Description"
+                  multiline
+                  rows={4}
+                  value={formData.description || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                  required
+                />
+              </Grid>
+            </Grid>
+
+            {/* Product Details */}
+            <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+              Product Details
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Price"
+                  type="number"
+                  value={formData.price || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, price: parseFloat(e.target.value) }))}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Category"
+                  value={formData.category || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Condition"
+                  value={formData.condition || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, condition: e.target.value }))}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Brand (Optional)"
+                  value={formData.brand || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, brand: e.target.value }))}
+                />
+              </Grid>
+            </Grid>
+
+            {/* Dimensions and Shipping */}
+            <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+              Dimensions and Shipping
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Length (inches)"
+                  type="number"
+                  value={formData.length || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, length: e.target.value }))}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Width (inches)"
+                  type="number"
+                  value={formData.width || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, width: e.target.value }))}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Height (inches)"
+                  type="number"
+                  value={formData.height || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, height: e.target.value }))}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Weight (pounds)"
+                  type="number"
+                  value={formData.weight || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, weight: e.target.value }))}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Size (Optional)"
+                  value={formData.size || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, size: e.target.value }))}
+                />
+              </Grid>
+            </Grid>
+
+            {/* Image and Inventory */}
+            <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+              Image and Inventory
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Image URL"
+                  value={formData.image || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, image: e.target.value }))}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Inventory"
+                  type="number"
+                  value={formData.inventory || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, inventory: parseInt(e.target.value) }))}
+                  required
+                />
+              </Grid>
+            </Grid>
+
+            {/* Hidden fields for units */}
+            <input type="hidden" value="in" name="distanceUnit" />
+            <input type="hidden" value="lb" name="massUnit" />
           </Box>
         </DialogContent>
         <DialogActions>

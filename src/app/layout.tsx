@@ -3,6 +3,7 @@ import { Inter, Markazi_Text, Shadows_Into_Light, Caveat } from "next/font/googl
 import "./globals.css";
 import Providers from "@/components/Providers";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ["latin"] });
 const markazi = Markazi_Text({
@@ -31,6 +32,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <Script
+          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
+          strategy="beforeInteractive"
+        />
+      </head>
       <body className={`${inter.className} ${markazi.variable} ${shadows.variable} ${caveat.variable}`}>
         <Providers>
           <ErrorBoundary>

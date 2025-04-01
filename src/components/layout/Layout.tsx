@@ -2,6 +2,7 @@ import React from 'react';
 import { AppBar, Box, Container, Toolbar, Typography, IconButton, Badge } from '@mui/material';
 import { ShoppingCart, Menu as MenuIcon } from '@mui/icons-material';
 import Link from 'next/link';
+import Script from 'next/script';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -69,6 +70,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </Typography>
         </Container>
       </Box>
+
+      <Script
+        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
+        strategy="beforeInteractive"
+      />
     </Box>
   );
 };

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { logger } from '@/utils/logger';
 import { handleApiError } from '@/utils/api-error';
+import { cookies } from 'next/headers';
 
 export async function POST(request: Request) {
   try {
@@ -36,14 +37,19 @@ export async function POST(request: Request) {
     if (credentialsMatch) {
       console.log('Credentials valid, setting cookie');
       
-      // Create headers with the cookie (20 minutes expiration)
-      const headers = new Headers();
-      headers.append('Set-Cookie', 'isAdmin=true; Path=/; HttpOnly; SameSite=Lax; Max-Age=1200');
+      // Add await here
+      const cookieStore = await cookies();
+      cookieStore.set('isAdmin', 'true', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/'
+      });
 
       // Create the response with the cookie header
       const response = NextResponse.json(
         { success: true },
-        { headers }
+        { status: 200 }
       );
 
       console.log('Cookie set successfully');

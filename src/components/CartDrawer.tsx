@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Drawer,
   Box,
@@ -11,6 +11,7 @@ import {
   ListItem,
   TextField,
   CircularProgress,
+  Autocomplete,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -18,6 +19,8 @@ import { useCart } from '@/contexts/CartContext';
 import { useSession } from 'next-auth/react';
 import { loadStripe } from '@stripe/stripe-js';
 import { logger, logError } from '@/utils/logger';
+import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete';
+import { useRouter } from 'next/navigation';
 
 // Initialize Stripe
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
@@ -27,7 +30,18 @@ interface CartDrawerProps {
   onClose: () => void;
 }
 
+interface ShippingAddress {
+  name: string;
+  street: string;
+  street2: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+}
+
 const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
+  const router = useRouter();
   const { state, dispatch } = useCart();
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
@@ -69,6 +83,11 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGuestCheckout = () => {
+    onClose();
+    router.push('/shipping');
   };
 
   const total = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -151,21 +170,34 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
       </Box>
 
       <Box sx={{ p: 2, borderTop: 1, borderColor: 'divider' }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>
-          Total: ${total.toFixed(2)}
+        <Typography variant="h6" gutterBottom>
+          Order Summary
         </Typography>
-        <Button
-          variant="contained"
-          fullWidth
-          onClick={handleCheckout}
-          disabled={state.items.length === 0 || loading}
-        >
-          {loading ? (
-            <CircularProgress size={24} color="inherit" />
-          ) : (
-            'Proceed to Checkout'
-          )}
-        </Button>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+          <Typography>Subtotal:</Typography>
+          <Typography>${total.toFixed(2)}</Typography>
+        </Box>
+        <Typography color="text.secondary" gutterBottom align="center" sx={{ mt: 2 }}>
+          Please log in or continue as guest to proceed with checkout
+        </Typography>
+        <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+          <Button
+            variant="contained"
+            fullWidth
+            disabled={state.items.length === 0 || loading}
+            onClick={handleGuestCheckout}
+          >
+            Log In
+          </Button>
+          <Button
+            variant="outlined"
+            fullWidth
+            disabled={state.items.length === 0 || loading}
+            onClick={handleGuestCheckout}
+          >
+            Continue as Guest
+          </Button>
+        </Box>
       </Box>
     </Drawer>
   );

@@ -9,7 +9,15 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(request: Request) {
   try {
-    const { items } = await request.json();
+    const body = await request.json();
+    const { items, shipping_address, amounts } = body;
+
+    console.log('Received checkout data:', {
+      items,
+      shipping_address,
+      amounts
+    });
+
     logger.info('Creating checkout session', { itemCount: items.length });
 
     if (!items?.length) {
@@ -21,44 +29,56 @@ export async function POST(request: Request) {
     }
 
     // Create line items for Stripe
-    const lineItems = items.map((item: any) => ({
+    const line_items = items.map((item: any) => ({
       price_data: {
         currency: 'usd',
         product_data: {
           name: item.title,
-          description: item.description,
-          images: [item.imageUrl],
         },
         unit_amount: Math.round(item.price * 100), // Convert to cents
       },
       quantity: item.quantity,
     }));
 
-    // Create Stripe checkout session
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: lineItems,
+    const sessionData = {
+      line_items,
       mode: 'payment',
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/cart`,
-      shipping_address_collection: {
-        allowed_countries: ['US', 'CA', 'GB'],
-      },
+      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/summary`,
+      shipping_options: [
+        {
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: {
+              amount: Math.round(amounts.shipping * 100),
+              currency: 'usd',
+            },
+            display_name: 'Selected Shipping Method',
+          },
+        },
+      ],
       automatic_tax: {
         enabled: true,
       },
       metadata: {
-        items: JSON.stringify(items.map((item: any) => ({
-          id: item.id,
-          quantity: item.quantity,
-        }))),
-      },
-    });
+        tax_amount: Math.round(amounts.tax * 100),
+        subtotal: Math.round(amounts.subtotal * 100),
+        total: Math.round(amounts.total * 100),
+      }
+    };
 
-    logger.info('Checkout session created', { sessionId: session.id });
+    console.log('Creating session with data:', sessionData);
 
-    return NextResponse.json({ url: session.url });
+    try {
+      const session = await stripe.checkout.sessions.create(sessionData);
+      logger.info('Checkout session created', { sessionId: session.id });
+      return NextResponse.json({ url: session.url });
+    } catch (stripeError) {
+      console.error('Stripe session creation error:', stripeError);
+      return handleApiError(stripeError, 'Checkout');
+    }
   } catch (error) {
+    console.error('General checkout error:', error);
     return handleApiError(error, 'Checkout');
   }
 } 

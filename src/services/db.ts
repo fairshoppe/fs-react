@@ -85,17 +85,22 @@ async function withRetry<T>(
   throw lastError;
 }
 
-export interface Product {
+interface Product {
   id: string;
   title: string;
   price: number;
-  description: string;
   image: string;
+  description?: string;
   category: string;
-  condition: string;
-  size: string;
-  weight: number;
   brand?: string;
+  condition?: string;
+  size?: string;          // Keeping the existing size field
+  length: string;         // Adding new dimension fields
+  width: string;
+  height: string;
+  weight: string;
+  distanceUnit: 'in';     // Fixed as inches
+  massUnit: 'lb';         // Fixed as pounds
   inventory: number;
   created_at?: Date;
   updated_at?: Date;

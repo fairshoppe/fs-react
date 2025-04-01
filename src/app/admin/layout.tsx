@@ -13,28 +13,18 @@ export default function AdminLayout({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const checkAuth = () => {
+    const checkAuth = async () => {
       try {
-        // Check if we're on the login page
         const isLoginPage = window.location.pathname === '/admin/login';
-        
-        // Get the admin cookie
         const cookies = document.cookie.split(';');
         const isAdmin = cookies.some(cookie => 
           cookie.trim().startsWith('isAdmin=true')
         );
         
-        console.log('Auth check:', {
-          isLoginPage,
-          isAdmin,
-          cookies: document.cookie,
-          parsedCookies: cookies,
-        });
-        
-        // If not on login page and not admin, redirect to login
         if (!isLoginPage && !isAdmin) {
-          console.log('Not authenticated, redirecting to login');
           router.push('/admin/login');
+        } else if (isLoginPage && isAdmin) {
+          router.push('/admin/products');
         }
       } catch (error) {
         console.error('Auth check error:', error);
@@ -44,9 +34,7 @@ export default function AdminLayout({
       }
     };
 
-    // Add a small delay to ensure cookies are properly loaded
-    const timer = setTimeout(checkAuth, 100);
-    return () => clearTimeout(timer);
+    checkAuth();
   }, [router]);
 
   if (isLoading) {

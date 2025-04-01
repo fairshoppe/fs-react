@@ -1,20 +1,46 @@
 'use client';
 
-import React, { createContext, useContext, useReducer, useEffect, useState } from 'react';
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
 
 interface CartItem {
   id: string;
   title: string;
   price: number;
-  image: string;
+  image?: string;
   quantity: number;
   category: string;
+  width?: number;
+  height?: number;
+  length?: number;
+  weight?: number;
+}
+
+export interface ShippingAddress {
+  name: string;
+  street: string;
+  street2: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+}
+
+interface ShippingRate {
+  id: string;
+  provider: string;
+  service: string;
+  rate: number;
+  days: string;
 }
 
 interface CartState {
   items: CartItem[];
   total: number;
   isLoading: boolean;
+  shippingRates: ShippingRate[];
+  selectedShippingRate: ShippingRate | null;
+  taxRate: number | null;
+  address: ShippingAddress | null;
 }
 
 type CartAction =
@@ -22,7 +48,10 @@ type CartAction =
   | { type: 'REMOVE_ITEM'; payload: string }
   | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
   | { type: 'CLEAR_CART' }
-  | { type: 'SET_ITEMS'; payload: CartItem[] };
+  | { type: 'SET_ITEMS'; payload: CartItem[] }
+  | { type: 'SET_SHIPPING_RATES'; payload: ShippingRate[] }
+  | { type: 'SELECT_SHIPPING_RATE'; payload: ShippingRate }
+  | { type: 'SET_ADDRESS'; payload: ShippingAddress };
 
 const CartContext = createContext<{
   state: CartState;
@@ -81,6 +110,10 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         items: [],
         total: 0,
         isLoading: false,
+        shippingRates: [],
+        selectedShippingRate: null,
+        taxRate: null,
+        address: null,
       };
 
     case 'SET_ITEMS':
@@ -88,6 +121,28 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         items: action.payload,
         total: action.payload.reduce((sum, item) => sum + item.price * item.quantity, 0),
         isLoading: false,
+        shippingRates: [],
+        selectedShippingRate: null,
+        taxRate: null,
+        address: null,
+      };
+
+    case 'SET_SHIPPING_RATES':
+      return {
+        ...state,
+        shippingRates: action.payload,
+      };
+
+    case 'SELECT_SHIPPING_RATE':
+      return {
+        ...state,
+        selectedShippingRate: action.payload,
+      };
+
+    case 'SET_ADDRESS':
+      return {
+        ...state,
+        address: action.payload,
       };
 
     default:
@@ -99,15 +154,17 @@ const initialState: CartState = {
   items: [],
   total: 0,
   isLoading: true,
+  shippingRates: [],
+  selectedShippingRate: null,
+  taxRate: null,
+  address: null,
 };
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, initialState);
-  const [isClient, setIsClient] = useState(false);
 
   // Load cart from localStorage on mount
   useEffect(() => {
-    setIsClient(true);
     try {
       const savedCart = localStorage.getItem('cart');
       if (savedCart) {
@@ -124,14 +181,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
-    if (isClient && !state.isLoading) {
-      try {
-        localStorage.setItem('cart', JSON.stringify(state.items));
-      } catch (error) {
-        console.error('Error saving cart to localStorage:', error);
-      }
+    try {
+      localStorage.setItem('cart', JSON.stringify(state.items));
+    } catch (error) {
+      console.error('Error saving cart to localStorage:', error);
     }
-  }, [state.items, state.isLoading, isClient]);
+  }, [state.items]);
 
   return (
     <CartContext.Provider value={{ state, dispatch }}>
@@ -146,4 +201,18 @@ export const useCart = () => {
     throw new Error('useCart must be used within a CartProvider');
   }
   return context;
+};
+
+const validateAddress = (address: ShippingAddress): boolean => {
+  const required = ['name', 'street', 'city', 'state', 'zipCode', 'country'];
+  const isValid = required.every(field => 
+    address[field as keyof ShippingAddress]?.trim().length > 0
+  );
+  
+  if (!isValid) {
+    // Show error message to user about missing fields
+    return false;
+  }
+
+  return true;
 }; 

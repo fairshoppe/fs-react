@@ -18,6 +18,7 @@
     "@mui/icons-material": "5.15.10",
     "@mui/material": "5.15.10",
     "@stripe/stripe-js": "^2.4.0",
+    "@types/google.maps": "^3.58.1",
     "bcryptjs": "^3.0.2",
     "esbuild": "^0.25.1",
     "firebase": "^11.5.0",
@@ -30,8 +31,10 @@
     "react": "^18",
     "react-dom": "^18",
     "react-google-recaptcha": "^3.1.0",
-    "stripe": "^14.16.0",
-    "typed-route-handler": "^1.1.0"
+    "shippo": "^2.15.0",
+    "stripe": "^14.25.0",
+    "typed-route-handler": "^1.1.0",
+    "use-places-autocomplete": "^4.0.1"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.9",

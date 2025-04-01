@@ -65,6 +65,8 @@ export default function CartPage() {
     );
   }
 
+  const subtotal = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
   return (
     <Box p={3}>
       <Typography variant="h4" gutterBottom>
@@ -103,23 +105,62 @@ export default function CartPage() {
           ))}
         </Grid>
         <Grid item xs={12} md={4}>
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Order Summary
-            </Typography>
-            <Box display="flex" justifyContent="space-between" mb={1}>
-              <Typography>Subtotal</Typography>
-              <Typography>${state.total.toFixed(2)}</Typography>
-            </Box>
-            <Box display="flex" justifyContent="space-between" mb={1}>
-              <Typography>Shipping</Typography>
-              <Typography>Free</Typography>
-            </Box>
-            <Box display="flex" justifyContent="space-between" mb={2}>
-              <Typography variant="h6">Total</Typography>
-              <Typography variant="h6">${state.total.toFixed(2)}</Typography>
-            </Box>
-            <CheckoutButton />
+          <Paper sx={{ p: 3, mt: 3 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography variant="h6" gutterBottom>
+                  Order Summary
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                  <Typography>Subtotal:</Typography>
+                  <Typography>${subtotal.toFixed(2)}</Typography>
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                  <Typography>Tax:</Typography>
+                  <Typography color="text.secondary">
+                    Shipping address needed to calculate tax
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+                  <Typography>Shipping:</Typography>
+                  <Typography color="text.secondary">
+                    Shipping address needed to calculate cost
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+                  <Typography variant="h6">Estimated Total:</Typography>
+                  <Typography variant="h6">
+                    ${subtotal.toFixed(2)}+
+                  </Typography>
+                </Box>
+              </Grid>
+              
+              <Grid item xs={12}>
+                <Typography color="text.secondary" gutterBottom>
+                  Please log in or continue as guest to provide shipping information
+                </Typography>
+                <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    onClick={() => {/* TODO: Add login route */}}
+                  >
+                    Log In
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    fullWidth
+                    onClick={() => {/* TODO: Add guest checkout route */}}
+                  >
+                    Continue as Guest
+                  </Button>
+                </Box>
+              </Grid>
+            </Grid>
           </Paper>
         </Grid>
       </Grid>
