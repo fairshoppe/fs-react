@@ -10,7 +10,7 @@ interface ServicePanelProps {
   buttonLink: string;
   backgroundImage?: string;
   backgroundImages?: string[];
-  variant?: 'tech' | 'design' | 'contact';
+  variant?: 'tech' | 'design' | 'contact' | 'ai-agent';
 }
 
 const ServicePanel = ({ 

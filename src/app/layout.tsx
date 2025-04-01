@@ -21,8 +21,8 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "Fair Shoppe",
-  description: "Your one-stop shop for thrift and custom items",
+  title: "The Fair Shoppe",
+  description: "Utilizing the power of creativity and technology to transform businesses and enrich lives.",
 };
 
 export default function RootLayout({

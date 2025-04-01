@@ -48,13 +48,13 @@ export default function Navbar() {
     { text: 'Buteos Systems', icon: <TechIcon />, path: '/tech-solutions' },
     { text: 'AI Agent by Buteos Systems', icon: <SmartToyIcon />, path: '/ai-page' },
     { text: 'Design and Consulting', icon: <DesignIcon />, path: '/design-consulting' },
-    { text: 'Thrift Shoppe', icon: <StoreIcon />, path: '/thrift' },
+    /* { text: 'Thrift Shoppe', icon: <StoreIcon />, path: '/thrift' },
     { 
       text: 'Custom Shoppe', 
       icon: <BrushIcon />, 
       path: 'https://the-fair-shoppe.printify.me',
       external: true 
-    },
+    },*/
     { text: 'Contact Us', icon: <ContactIcon />, path: '/contact' },
   ];
 

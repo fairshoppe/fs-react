@@ -3,19 +3,23 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Container, Typography } from '@mui/material';
 import Navbar from './Navbar';
+import ServicePopup from './ServicePopup';
 
 interface ServicePageLayoutProps {
   children: React.ReactNode;
   title: string;
   backgroundImages: string[];
+  textFileName?: string; // Optional because some services might not have additional info
 }
 
 const ServicePageLayout: React.FC<ServicePageLayoutProps> = ({
   children,
   title,
   backgroundImages,
+  textFileName,
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -84,13 +88,34 @@ const ServicePageLayout: React.FC<ServicePageLayoutProps> = ({
       </Box>
 
       {/* Main Content */}
-      <Box component="main" sx={{ flexGrow: 1, py: 6 }}>
+      <Box 
+        component="main" 
+        sx={{ 
+          flexGrow: 1, 
+          py: 6,
+          cursor: textFileName ? 'pointer' : 'default',
+          '&:hover': textFileName ? {
+            opacity: 0.9,
+            transition: 'opacity 0.2s ease-in-out',
+          } : {},
+        }}
+        onClick={() => textFileName && setShowPopup(true)}
+      >
         <Container maxWidth="lg">
           <Box sx={{ maxWidth: '4xl', mx: 'auto' }}>
             {children}
           </Box>
         </Container>
       </Box>
+
+      {/* Service Popup */}
+      {textFileName && (
+        <ServicePopup
+          open={showPopup}
+          onClose={() => setShowPopup(false)}
+          textFileName={textFileName}
+        />
+      )}
 
       {/* Footer */}
       <Box

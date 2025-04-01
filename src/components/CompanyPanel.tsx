@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const OpeningPanel = () => {
+const CompanyPanel = () => {
   return (
     // Main container: Full screen, flex centering, soft blueish-gray background
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#2d2d32]">
@@ -26,7 +26,7 @@ const OpeningPanel = () => {
             {/* Image */}
             <Image
               // Replace with your actual image path
-              src="/backgrounds/intro2.jpg" // <<< CHANGE THIS TO YOUR IMAGE PATH
+              src="/backgrounds/tech5.jpeg" // <<< CHANGE THIS TO YOUR IMAGE PATH
               alt="Featured Content"
               layout="fill"
               objectFit="cover"
@@ -40,19 +40,19 @@ const OpeningPanel = () => {
           {/* Logo Container */}
           <div className="w-28 h-28 bg-[#bcd5e6] rounded-full mb-8 flex-shrink-0">
              {/* Optional: Place your actual <Image> component here */}
-             <Image src="/fs_logo4.svg" alt="The Fair Shoppe Logo" width={112} height={112} className="rounded-full" />
+             <Image src="/Buteos.jpg" alt="Buteos Systems Logo" width={112} height={112} className="rounded-full" />
           </div>
 
           {/* Text Content */}
           <p className="text-lg lg:text-xl text-[#BCD5E6] font-markazi my-auto flex-grow text-center">
              {/* Consider changing text-gray-700 if your default background is dark */}
              {/* Remove text-center if you only want the block centered, not the text inside it */}
-             At The Fair Shoppe, we believe in the power of creativity and technology to transform businesses and enrich lives.
+             Innovative tech solutions tailored to your business needs. We provide cutting-edge technology solutions designed to empower your business and drive growth. Our team of experienced developers and engineers specializes in creating custom software, web applications, and digital platforms that address your unique challenges.
           </p>
 
           {/* Button */}
-          <Link href="/ai-page" className="mt-8 bg-[#bcd5e6] text-gray-900 py-2 px-6 rounded-lg hover:bg-white transition-colors flex-shrink-0">
-            What's New
+          <Link href="/tech-solutions" className="mt-8 bg-[#bcd5e6] text-gray-900 py-2 px-6 rounded-lg hover:bg-white transition-colors flex-shrink-0">
+            Explore Solutions
           </Link>
         </div>
       </div>
@@ -60,4 +60,4 @@ const OpeningPanel = () => {
   );
 };
 
-export default OpeningPanel;
+export default CompanyPanel;

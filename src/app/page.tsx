@@ -1,31 +1,31 @@
+"use client";
+
 import OpeningPanel from "@/components/OpeningPanel";
 import Navbar from "@/components/Navbar";
 import ServicePanel from "@/components/ServicePanel";
 import ProductsPanel from "@/components/ProductsPanel";
+import CompanyPanel from "@/components/CompanyPanel";
+import FeaturePopup from "@/components/FeaturePopup";
+import { useState, useEffect } from "react";
 
 export default function Home() {
+  const [showFeaturePopup, setShowFeaturePopup] = useState(false);
+
+  useEffect(() => {
+    // Show popup on every page load
+    setShowFeaturePopup(true);
+  }, []);
+
   return (
     <div className="min-h-screen">
       <Navbar />
+      <FeaturePopup 
+        open={showFeaturePopup} 
+        onClose={() => setShowFeaturePopup(false)} 
+      />
       <main className="snap-y snap-mandatory h-screen overflow-y-auto">
-        <div className="snap-start">
-          <OpeningPanel />
-        </div>
-        <div className="snap-start">
-          <ServicePanel
-            title="Buteos Systems"
-            description="Innovative tech solutions tailored to your business needs. We provide cutting-edge technology solutions designed to empower your business and drive growth. Our team of experienced developers and engineers specializes in creating custom software, web applications, and digital platforms that address your unique challenges."
-            buttonText="Explore Solutions"
-            buttonLink="/tech-solutions"
-            backgroundImages={[
-              '/backgrounds/tech1.jpeg',
-              '/backgrounds/tech2.jpeg',
-              '/backgrounds/tech3.jpeg',
-              '/backgrounds/tech4.jpeg',
-              '/backgrounds/tech5.jpeg'
-            ]}
-            variant="tech"
-          />
+      <div className="snap-start">
+          <CompanyPanel />
         </div>
         <div className="snap-start">
           <ServicePanel
@@ -34,14 +34,18 @@ export default function Home() {
             buttonText="Explore Agents"
             buttonLink="/ai-page"
             backgroundImages={[
+              
+              '/backgrounds/tech4.jpeg',
+              '/backgrounds/tech5.jpeg',
               '/backgrounds/tech1.jpeg',
               '/backgrounds/tech2.jpeg',
-              '/backgrounds/tech3.jpeg',
-              '/backgrounds/tech4.jpeg',
-              '/backgrounds/tech5.jpeg'
+              '/backgrounds/tech3.jpeg'
             ]}
             variant="ai-agent"
           />
+        </div>
+        <div className="snap-start">
+          <OpeningPanel />
         </div>
         <div className="snap-start">
           <ServicePanel
@@ -58,9 +62,6 @@ export default function Home() {
             ]}
             variant="design"
           />
-        </div>
-        <div className="snap-start">
-          <ProductsPanel />
         </div>
         <div className="snap-start">
           <ServicePanel
