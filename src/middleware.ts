@@ -15,23 +15,6 @@ export function middleware(request: NextRequest) {
   // Get the pathname of the request
   const path = request.nextUrl.pathname;
 
-  // Check if the path starts with /admin
-  if (path.startsWith('/admin')) {
-    // Skip middleware for the login page
-    if (path === '/admin/login') {
-      return NextResponse.next();
-    }
-
-    // Check for admin authentication
-    const isAdmin = request.cookies.get('isAdmin')?.value === 'true';
-
-    // If not authenticated, redirect to login
-    if (!isAdmin) {
-      const loginUrl = new URL('/admin/login', request.url);
-      return NextResponse.redirect(loginUrl);
-    }
-  }
-
   // Handle CORS for API routes
   if (path.startsWith('/api/')) {
     const origin = request.headers.get('origin');
@@ -142,6 +125,5 @@ export const config = {
   matcher: [
     // Match all routes except static files, api routes, and _next internal routes
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-    '/admin/:path*',
   ],
 }; 
