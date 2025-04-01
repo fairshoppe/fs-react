@@ -40,7 +40,7 @@ export default function Home() {
               '/backgrounds/tech4.jpeg',
               '/backgrounds/tech5.jpeg'
             ]}
-            variant="tech"
+            variant="ai-agent"
           />
         </div>
         <div className="snap-start">

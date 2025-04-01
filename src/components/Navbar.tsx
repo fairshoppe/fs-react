@@ -25,6 +25,7 @@ import {
   Code as TechIcon,
   Palette as DesignIcon,
   ContactSupport as ContactIcon,
+  SmartToy as SmartToyIcon,
 } from '@mui/icons-material';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -45,6 +46,7 @@ export default function Navbar() {
   const menuItems = [
     { text: 'Home', icon: <HomeIcon />, path: '/' },
     { text: 'Buteos Systems', icon: <TechIcon />, path: '/tech-solutions' },
+    { text: 'AI Agent by Buteos Systems', icon: <SmartToyIcon />, path: '/ai-page' },
     { text: 'Design and Consulting', icon: <DesignIcon />, path: '/design-consulting' },
     { text: 'Thrift Shoppe', icon: <StoreIcon />, path: '/thrift' },
     { 
