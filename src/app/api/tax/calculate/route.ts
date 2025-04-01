@@ -43,8 +43,7 @@ export async function POST(request: Request) {
           state: address.state,
           postal_code: address.zip,
           country: address.country
-        },
-        address_source: 'shipping'
+        }
       }
     });
 
@@ -56,8 +55,18 @@ export async function POST(request: Request) {
 
   } catch (error) {
     console.error('Tax calculation error:', error);
+    let errorMessage = 'Tax calculation failed';
+    
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    } else if (typeof error === 'string') {
+      errorMessage = error;
+    } else if (error && typeof error === 'object' && 'message' in error) {
+      errorMessage = error.message as string;
+    }
+    
     return NextResponse.json(
-      { error: `Tax calculation error: ${error.message}` },
+      { error: `Tax calculation error: ${errorMessage}` },
       { status: 500 }
     );
   }

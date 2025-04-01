@@ -40,21 +40,6 @@ export async function POST(req: Request) {
           status: session.payment_status,
         });
 
-        // Log shipping details if available
-        if (session.shipping_details) {
-          logger.info('Shipping details', {
-            name: session.shipping_details.name,
-            address: {
-              line1: session.shipping_details.address?.line1,
-              line2: session.shipping_details.address?.line2,
-              city: session.shipping_details.address?.city,
-              state: session.shipping_details.address?.state,
-              postal_code: session.shipping_details.address?.postal_code,
-              country: session.shipping_details.address?.country,
-            },
-          });
-        }
-
         // Log tax details if available
         if (session.total_details) {
           logger.info('Tax details', {

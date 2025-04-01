@@ -10,11 +10,10 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { items, shipping_address, amounts } = body;
+    const { items, amounts } = body;
 
     console.log('Received checkout data:', {
       items,
-      shipping_address,
       amounts
     });
 
@@ -40,30 +39,18 @@ export async function POST(request: Request) {
       quantity: item.quantity,
     }));
 
-    const sessionData = {
+    const sessionData: Stripe.Checkout.SessionCreateParams = {
       line_items,
-      mode: 'payment',
+      mode: 'payment' as const,
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/summary`,
-      shipping_options: [
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: {
-              amount: Math.round(amounts.shipping * 100),
-              currency: 'usd',
-            },
-            display_name: 'Selected Shipping Method',
-          },
-        },
-      ],
       automatic_tax: {
         enabled: true,
       },
       metadata: {
-        tax_amount: Math.round(amounts.tax * 100),
-        subtotal: Math.round(amounts.subtotal * 100),
-        total: Math.round(amounts.total * 100),
+        tax_amount: Math.round(amounts.tax * 100).toString(),
+        subtotal: Math.round(amounts.subtotal * 100).toString(),
+        total: Math.round(amounts.total * 100).toString(),
       }
     };
 

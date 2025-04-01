@@ -78,11 +78,13 @@ export default function CartPage() {
             <Paper key={item.id} sx={{ p: 2, mb: 2 }}>
               <Grid container spacing={2} alignItems="center">
                 <Grid item xs={3}>
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    style={{ width: '100%', height: 'auto' }}
-                  />
+                  {item.image && (
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      style={{ width: '100%', height: 'auto' }}
+                    />
+                  )}
                 </Grid>
                 <Grid item xs={9}>
                   <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -105,7 +107,7 @@ export default function CartPage() {
           ))}
         </Grid>
         <Grid item xs={12} md={4}>
-          <Paper sx={{ p: 3, mt: 3 }}>
+          <Paper sx={{ p: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Typography variant="h6" gutterBottom>
@@ -120,17 +122,11 @@ export default function CartPage() {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                   <Typography>Tax:</Typography>
                   <Typography color="text.secondary">
-                    Shipping address needed to calculate tax
+                    Calculated at checkout
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                  <Typography>Shipping:</Typography>
-                  <Typography color="text.secondary">
-                    Shipping address needed to calculate cost
-                  </Typography>
-                </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                  <Typography variant="h6">Estimated Total:</Typography>
+                  <Typography variant="h6">Total:</Typography>
                   <Typography variant="h6">
                     ${subtotal.toFixed(2)}+
                   </Typography>
@@ -138,27 +134,7 @@ export default function CartPage() {
               </Grid>
               
               <Grid item xs={12}>
-                <Typography color="text.secondary" gutterBottom>
-                  Please log in or continue as guest to provide shipping information
-                </Typography>
-                <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    onClick={() => {/* TODO: Add login route */}}
-                  >
-                    Log In
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    fullWidth
-                    onClick={() => {/* TODO: Add guest checkout route */}}
-                  >
-                    Continue as Guest
-                  </Button>
-                </Box>
+                <CheckoutButton />
               </Grid>
             </Grid>
           </Paper>

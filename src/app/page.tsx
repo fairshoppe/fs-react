@@ -3,7 +3,6 @@
 import OpeningPanel from "@/components/OpeningPanel";
 import Navbar from "@/components/Navbar";
 import ServicePanel from "@/components/ServicePanel";
-import ProductsPanel from "@/components/ProductsPanel";
 import CompanyPanel from "@/components/CompanyPanel";
 import FeaturePopup from "@/components/FeaturePopup";
 import { useState, useEffect } from "react";

@@ -13,13 +13,15 @@ interface CartItem {
 interface CartState {
   items: CartItem[];
   total: number;
+  isLoading: boolean;
 }
 
 type CartAction =
   | { type: 'ADD_ITEM'; payload: CartItem }
   | { type: 'REMOVE_ITEM'; payload: string }
   | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
-  | { type: 'CLEAR_CART' };
+  | { type: 'CLEAR_CART' }
+  | { type: 'SET_LOADING'; payload: boolean };
 
 const CartContext = createContext<{
   state: CartState;
@@ -75,8 +77,15 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
 
     case 'CLEAR_CART':
       return {
+        ...state,
         items: [],
         total: 0,
+      };
+
+    case 'SET_LOADING':
+      return {
+        ...state,
+        isLoading: action.payload,
       };
 
     default:
@@ -87,6 +96,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
 const initialState: CartState = {
   items: [],
   total: 0,
+  isLoading: false,
 };
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
