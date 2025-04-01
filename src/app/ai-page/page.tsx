@@ -60,7 +60,7 @@ export default function TechSolutions() {
     >
       <div className="space-y-8 font-[var(--font-markazi)]">
         <p className="text-xl text-gray-700">
-          Our comprehensive tech solutions are designed to empower your business with cutting-edge technology and innovation.
+          Our AI agents are designed to empower your business with cutting-edge technology and innovation.
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

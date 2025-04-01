@@ -19,8 +19,6 @@ import {
 import {
   Menu as MenuIcon,
   ShoppingCart,
-  Store as StoreIcon,
-  Brush as BrushIcon,
   Home as HomeIcon,
   Code as TechIcon,
   Palette as DesignIcon,
@@ -48,13 +46,6 @@ export default function Navbar() {
     { text: 'Buteos Systems', icon: <TechIcon />, path: '/tech-solutions' },
     { text: 'AI Agent by Buteos Systems', icon: <SmartToyIcon />, path: '/ai-page' },
     { text: 'Design and Consulting', icon: <DesignIcon />, path: '/design-consulting' },
-    /* { text: 'Thrift Shoppe', icon: <StoreIcon />, path: '/thrift' },
-    { 
-      text: 'Custom Shoppe', 
-      icon: <BrushIcon />, 
-      path: 'https://the-fair-shoppe.printify.me',
-      external: true 
-    },*/
     { text: 'Contact Us', icon: <ContactIcon />, path: '/contact' },
   ];
 
@@ -127,12 +118,10 @@ export default function Navbar() {
               <ListItem
                 button
                 key={item.text}
-                component={item.external ? 'a' : Link}
+                component={Link}
                 href={item.path}
-                target={item.external ? '_blank' : undefined}
-                rel={item.external ? 'noopener noreferrer' : undefined}
                 onClick={() => setMenuOpen(false)}
-                selected={!item.external && pathname === item.path}
+                selected={pathname === item.path}
               >
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText

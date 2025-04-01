@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Drawer,
   Box,
@@ -11,39 +11,20 @@ import {
   ListItem,
   TextField,
   CircularProgress,
-  Autocomplete,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useCart } from '@/contexts/CartContext';
-import { useSession } from 'next-auth/react';
-import { loadStripe } from '@stripe/stripe-js';
-import { logger, logError } from '@/utils/logger';
-import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete';
 import { useRouter } from 'next/navigation';
-
-// Initialize Stripe
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 interface CartDrawerProps {
   open: boolean;
   onClose: () => void;
 }
 
-interface ShippingAddress {
-  name: string;
-  street: string;
-  street2: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  country: string;
-}
-
 const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
   const router = useRouter();
   const { state, dispatch } = useCart();
-  const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
 
   const handleQuantityChange = (productId: string, newQuantity: number) => {
@@ -58,36 +39,13 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
   const handleCheckout = async () => {
     try {
       setLoading(true);
-
-      // Create checkout session
-      const response = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          items: state.items,
-          userId: session?.user?.id,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create checkout session');
-      }
-
-      const { url } = await response.json();
-      window.location.href = url;
+      router.push('/checkout');
     } catch (error) {
-      logError(error instanceof Error ? error : new Error('Checkout failed'), 'Cart Checkout');
+      console.error('Checkout failed:', error);
       alert('Failed to start checkout process. Please try again.');
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleGuestCheckout = () => {
-    onClose();
-    router.push('/shipping');
   };
 
   const total = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -177,27 +135,15 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
           <Typography>Subtotal:</Typography>
           <Typography>${total.toFixed(2)}</Typography>
         </Box>
-        <Typography color="text.secondary" gutterBottom align="center" sx={{ mt: 2 }}>
-          Please log in or continue as guest to proceed with checkout
-        </Typography>
-        <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
-          <Button
-            variant="contained"
-            fullWidth
-            disabled={state.items.length === 0 || loading}
-            onClick={handleGuestCheckout}
-          >
-            Log In
-          </Button>
-          <Button
-            variant="outlined"
-            fullWidth
-            disabled={state.items.length === 0 || loading}
-            onClick={handleGuestCheckout}
-          >
-            Continue as Guest
-          </Button>
-        </Box>
+        <Button
+          variant="contained"
+          fullWidth
+          disabled={state.items.length === 0 || loading}
+          onClick={handleCheckout}
+          sx={{ mt: 2 }}
+        >
+          {loading ? <CircularProgress size={24} /> : 'Proceed to Checkout'}
+        </Button>
       </Box>
     </Drawer>
   );

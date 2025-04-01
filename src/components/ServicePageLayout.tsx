@@ -74,7 +74,7 @@ const ServicePageLayout: React.FC<ServicePageLayoutProps> = ({
           }}
         >
           <Typography
-            variant="h2"
+            variant="h1"
             sx={{
               color: '#BCD5E6',
               textAlign: 'center',
@@ -114,6 +114,7 @@ const ServicePageLayout: React.FC<ServicePageLayoutProps> = ({
           open={showPopup}
           onClose={() => setShowPopup(false)}
           textFileName={textFileName}
+          title={title}
         />
       )}
 
