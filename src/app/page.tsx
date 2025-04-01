@@ -13,10 +13,26 @@ export default function Home() {
         </div>
         <div className="snap-start">
           <ServicePanel
-            title="Tech Solutions by Buteos Systems"
+            title="Buteos Systems"
             description="Innovative tech solutions tailored to your business needs. We provide cutting-edge technology solutions designed to empower your business and drive growth. Our team of experienced developers and engineers specializes in creating custom software, web applications, and digital platforms that address your unique challenges."
             buttonText="Explore Solutions"
             buttonLink="/tech-solutions"
+            backgroundImages={[
+              '/backgrounds/tech1.jpeg',
+              '/backgrounds/tech2.jpeg',
+              '/backgrounds/tech3.jpeg',
+              '/backgrounds/tech4.jpeg',
+              '/backgrounds/tech5.jpeg'
+            ]}
+            variant="tech"
+          />
+        </div>
+        <div className="snap-start">
+          <ServicePanel
+            title="AI Agents by Buteos Systems"
+            description="Artificial Itelligence agents represent a significant evolution in software technology. They function as autonomous programs capable of perceiving their environment, making informed decisions and executing actions to acheive specific objectives."
+            buttonText="Explore Agents"
+            buttonLink="/ai-page"
             backgroundImages={[
               '/backgrounds/tech1.jpeg',
               '/backgrounds/tech2.jpeg',
