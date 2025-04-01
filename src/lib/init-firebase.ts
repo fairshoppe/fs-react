@@ -1,15 +1,7 @@
 import { initializeApp, getApps, cert } from 'firebase-admin/app';
-import { getFirestore, CollectionReference, Firestore } from 'firebase-admin/firestore';
 import { logger, logError } from '@/utils/logger';
 
-let firestoreDb: Firestore;
-
-export function getFirestoreDb() {
-  if (firestoreDb) {
-    logger.debug('Returning existing Firestore instance');
-    return firestoreDb;
-  }
-
+export function initializeFirebaseAdmin() {
   try {
     logger.info('Initializing Firebase Admin app...');
 
@@ -47,10 +39,6 @@ export function getFirestoreDb() {
     // Format private key correctly
     const privateKey = requiredEnvVars.privateKey.replace(/\\n/g, '\n');
 
-    // Construct database URL
-    const databaseURL = `https://${requiredEnvVars.projectId}.firebaseio.com`;
-    logger.info('Initializing Firebase Admin with database URL:', databaseURL);
-
     // Initialize the app if it doesn't exist
     const apps = getApps();
     if (!apps.length) {
@@ -60,40 +48,13 @@ export function getFirestoreDb() {
           clientEmail: requiredEnvVars.clientEmail,
           privateKey,
         }),
-        databaseURL,
       });
       logger.info('Firebase Admin app initialized successfully with project:', requiredEnvVars.projectId);
     } else {
       logger.info('Using existing Firebase Admin app');
     }
 
-    logger.info('Initializing Firestore...');
-    firestoreDb = getFirestore();
-
-    // Test database connection
-    void (async () => {
-      try {
-        logger.debug('Testing Firestore connection...');
-        const collections = await firestoreDb.listCollections();
-        logger.info('Successfully connected to Firestore database');
-        logger.debug(
-          'Available collections:',
-          collections.map((c: CollectionReference) => c.id)
-        );
-      } catch (err) {
-        // Only log connection test errors in development mode
-        if (process.env.NODE_ENV === 'development') {
-          if (err instanceof Error) {
-            logger.warn('Firestore connection test failed:', err.message);
-          } else {
-            logger.warn('Unknown error during Firestore connection test');
-          }
-        }
-        // Don't throw the error as it's just a test
-      }
-    })();
-
-    return firestoreDb;
+    return apps[0];
   } catch (err) {
     if (err instanceof Error) {
       logError(err, 'Firebase Admin Initialization');
@@ -107,7 +68,7 @@ export function getFirestoreDb() {
 // Initialize Firebase Admin
 void (async () => {
   try {
-    await getFirestoreDb();
+    await initializeFirebaseAdmin();
   } catch (err) {
     if (err instanceof Error) {
       logError(err, 'Firebase Admin Initialization');
