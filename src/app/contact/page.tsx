@@ -71,7 +71,7 @@ export default function Contact() {
       {/* Background Image */}
       <div 
         className="fixed inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: 'url(/backgrounds/contact1.jpeg)' }}
+        style={{ backgroundImage: 'url(/backgrounds/contact2.jpeg)' }}
       >
         <div className="absolute inset-0 bg-black/50" />
       </div>
@@ -79,7 +79,7 @@ export default function Contact() {
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 py-16 mt-16">
         <div className="max-w-2xl mx-auto bg-white/10 backdrop-blur-md rounded-lg shadow-xl p-8">
-          <h1 className="text-4xl font-bold text-white mb-8 text-center font-[var(--font-caveat)]">
+          <h1 className="text-4xl font-bold text-[#bcd5e6] mb-8 text-center font-[var(--font-caveat)]">
             Contact Us
           </h1>
 
@@ -119,6 +119,17 @@ export default function Contact() {
                   name="email"
                   autoComplete="email"
                   value={formData.email}
+                  onChange={handleChange}
+                  disabled={loading}
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="subject"
+                  label="Subject"
+                  name="subject"
+                  value={formData.subject}
                   onChange={handleChange}
                   disabled={loading}
                 />

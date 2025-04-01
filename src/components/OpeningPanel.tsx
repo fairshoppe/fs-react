@@ -7,7 +7,7 @@ import Link from 'next/link';
 const OpeningPanel = () => {
   return (
     // Main container: Full screen, flex centering, soft blueish-gray background
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#2d2d32]">
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#2d2d32] mb-24 md:mb-0">
 
       {/* Content Area - Split Layout */}
       {/* Using flex-col for small screens, md:flex-row for medium and up */}

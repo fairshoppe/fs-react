@@ -68,7 +68,7 @@ export default function Home() {
             description="We're eager to connect with you and discuss how we can help you achieve your goals. Whether you have questions about our services, want to request a quote, or simply want to learn more about what we do, we're here to assist you."
             buttonText="Get in Touch"
             buttonLink="/contact"
-            backgroundImage="/backgrounds/contact1.jpeg"
+            backgroundImage="/backgrounds/contact2.jpeg"
             variant="contact"
           />
         </div>

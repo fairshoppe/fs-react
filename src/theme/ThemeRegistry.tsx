@@ -7,10 +7,10 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
+      main: '#bcd5e6',
     },
     secondary: {
-      main: '#dc004e',
+      main: '#bcd5e6',
     },
     background: {
       default: '#2d2d32',
@@ -21,7 +21,7 @@ const theme = createTheme({
     fontFamily: 'var(--font-markazi), Roboto, Arial, sans-serif',
     h1: {
       fontFamily: 'var(--font-markazi)',
-      fontSize: '2.5rem',
+      fontSize: '3rem',
       fontWeight: 700,
     },
     h2: {

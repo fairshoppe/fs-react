@@ -7,7 +7,7 @@ import Link from 'next/link';
 const CompanyPanel = () => {
   return (
     // Main container: Full screen, flex centering, soft blueish-gray background
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#2d2d32]">
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#2d2d32] mt-24 md:mt-0">
 
       {/* Content Area - Split Layout */}
       {/* Using flex-col for small screens, md:flex-row for medium and up */}
@@ -47,7 +47,7 @@ const CompanyPanel = () => {
           <p className="text-lg lg:text-xl text-[#BCD5E6] font-markazi my-auto flex-grow text-center">
              {/* Consider changing text-gray-700 if your default background is dark */}
              {/* Remove text-center if you only want the block centered, not the text inside it */}
-             Innovative tech solutions tailored to your business needs. We provide cutting-edge technology solutions designed to empower your business and drive growth. Our team of experienced developers and engineers specializes in creating custom software, web applications, and digital platforms that address your unique challenges.
+             Innovative tech solutions tailored to your business needs. We provide cutting-edge technology solutions designed to empower your business and drive growth.
           </p>
 
           {/* Button */}
