@@ -16,8 +16,8 @@ const CompanyPanel = () => {
       <div className="relative z-10 flex flex-col md:flex-row w-full h-full max-w-7xl mx-auto p-8 md:p-16 items-stretch md:items-center">
           {/* Added items-stretch for columns to potentially fill height better if needed, md:items-center centers them vertically on wider screens */}
 
-        {/* Right Column - Now on the left */}
-        <div className="w-full md:w-1/2 h-full flex items-center justify-center md:pr-8 lg:pr-12">
+        {/* Left Column */}
+        <div className="w-full md:w-1/2 h-full flex items-center justify-center md:pr-8 lg:pr-12 mb-8 md:mb-0">
           {/* Custom Border Container */}
           <div className="relative w-full h-[30vh] md:h-[45vh] lg:h-[52vh] max-h-[450px]
                         border-r-2 border-t-2 border-[#bcd5e6] rounded-tr-[40px] overflow-hidden">
@@ -35,7 +35,7 @@ const CompanyPanel = () => {
           </div>
         </div>
 
-        {/* Left Column - Now on the right */}
+        {/* Right Column */}
         <div className="w-full md:w-1/2 h-full flex flex-col items-center mb-8 md:mb-0 md:pl-8 lg:pl-12">
           {/* Logo Container */}
           <div className="w-28 h-28 bg-[#bcd5e6] rounded-full mb-8 flex-shrink-0">
@@ -51,7 +51,7 @@ const CompanyPanel = () => {
           </p>
 
           {/* Button */}
-          <Link href="/tech-solutions" className="mt-8 bg-[#bcd5e6] text-gray-900 py-2 px-6 rounded-lg hover:bg-white transition-colors flex-shrink-0">
+          <Link href="/buteos" className="mt-8 bg-[#bcd5e6] text-gray-900 py-2 px-6 rounded-lg hover:bg-white transition-colors flex-shrink-0">
             Explore Solutions
           </Link>
         </div>

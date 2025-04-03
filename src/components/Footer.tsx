@@ -20,7 +20,7 @@ const Footer = () => {
               The Fair Shoppe
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Your one-stop destination for custom prints and thrift finds.
+              Tech solutions for the modern world.
             </Typography>
           </Grid>
           <Grid item xs={12} md={4}>
@@ -28,24 +28,8 @@ const Footer = () => {
               Quick Links
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Link href="/thrift" style={{ color: 'inherit', textDecoration: 'none' }}>
-                <Typography component="span" sx={{ '&:hover': { textDecoration: 'underline' } }}>
-                  The Thrift Shoppe
-                </Typography>
-              </Link>
-              <a
-                href="https://the-fair-shoppe.printify.me"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: 'inherit', textDecoration: 'none' }}
-              >
-                <Typography
-                  component="span"
-                  sx={{ '&:hover': { textDecoration: 'underline' } }}
-                >
-                  Custom Print Shoppe
-                </Typography>
-              </a>
+              
+          
               <Link href="/about" style={{ color: 'inherit', textDecoration: 'none' }}>
                 <Typography component="span" sx={{ '&:hover': { textDecoration: 'underline' } }}>
                   About Us

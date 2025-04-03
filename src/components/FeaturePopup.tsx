@@ -29,10 +29,10 @@ const FeaturePopup: React.FC<FeaturePopupProps> = ({ open, onClose }) => {
       <Box
         sx={{
           position: 'relative',
-          backgroundColor: '#BCD5E6',
+          backgroundColor: '#5a5d62',
           borderRadius: 2,
           padding: 4,
-          maxWidth: 500,
+          maxWidth: 300,
           width: '90%',
           boxShadow: 24,
         }}
@@ -62,11 +62,23 @@ const FeaturePopup: React.FC<FeaturePopupProps> = ({ open, onClose }) => {
             textAlign: 'center',
           }}
         >
-          New to The Fair Shoppe: AI Agents by Buteos Systems
+          New to The Fair Shoppe:
+        </Typography>
+        <Typography
+          variant="h4"
+          component="h2"
+          sx={{
+            fontFamily: 'var(--font-markazi)',
+            color: '#1a0033',
+            mb: 3,
+            textAlign: 'center',
+          }}
+        >
+          AI Agents by Buteos Systems
         </Typography>
 
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-          <Link href="/ai-page" passHref style={{ textDecoration: 'none' }}>
+          <Link href="/ai-agents" passHref style={{ textDecoration: 'none' }}>
             <Button
               variant="contained"
               sx={{

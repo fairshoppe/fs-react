@@ -51,7 +51,7 @@ const OpeningPanel = () => {
           </p>
 
           {/* Button */}
-          <Link href="/ai-page" className="mt-8 bg-[#bcd5e6] text-gray-900 py-2 px-6 rounded-lg hover:bg-white transition-colors flex-shrink-0">
+          <Link href="/ai-agents" className="mt-8 bg-[#bcd5e6] text-gray-900 py-2 px-6 rounded-lg hover:bg-white transition-colors flex-shrink-0">
             What's New
           </Link>
         </div>

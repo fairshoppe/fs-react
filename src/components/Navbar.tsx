@@ -43,8 +43,8 @@ export default function Navbar() {
 
   const menuItems = [
     { text: 'Home', icon: <HomeIcon />, path: '/' },
-    { text: 'Buteos Systems', icon: <TechIcon />, path: '/tech-solutions' },
-    { text: 'AI Agent by Buteos Systems', icon: <SmartToyIcon />, path: '/ai-page' },
+    { text: 'Buteos Systems', icon: <TechIcon />, path: '/buteos' },
+    { text: 'AI Agent by Buteos Systems', icon: <SmartToyIcon />, path: '/ai-agents' },
     { text: 'Design and Consulting', icon: <DesignIcon />, path: '/design-consulting' },
     { text: 'Contact Us', icon: <ContactIcon />, path: '/contact' },
   ];

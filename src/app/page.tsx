@@ -31,7 +31,7 @@ export default function Home() {
             title="AI Agents by Buteos Systems"
             description="Artificial Itelligence agents represent a significant evolution in software technology. They function as autonomous programs capable of perceiving their environment, making informed decisions and executing actions to acheive specific objectives."
             buttonText="Explore Agents"
-            buttonLink="/ai-page"
+            buttonLink="/ai-agents"
             backgroundImages={[
               
               '/backgrounds/tech4.jpeg',
