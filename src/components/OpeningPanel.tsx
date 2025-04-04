@@ -17,7 +17,7 @@ const OpeningPanel = () => {
           {/* Added items-stretch for columns to potentially fill height better if needed, md:items-center centers them vertically on wider screens */}
 
         {/* Right Column - Now on the left */}
-        <div className="w-full md:w-1/2 h-full flex items-center justify-center md:pr-8 lg:pr-12">
+        <div className="w-full md:w-1/2 h-full flex items-center justify-center md:pr-8 lg:pr-12 mb-8 md:mb-0">
           {/* Custom Border Container */}
           <div className="relative w-full h-[30vh] md:h-[45vh] lg:h-[52vh] max-h-[450px]
                         border-r-2 border-t-2 border-[#bcd5e6] rounded-tr-[40px] overflow-hidden">
